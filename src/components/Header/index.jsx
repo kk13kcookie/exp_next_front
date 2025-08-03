@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "@/components/Header/style.module.scss";
+import styles from "./style.module.scss";
 import Link from "next/link";
 import AccessibilityIcon from "@mui/icons-material/Accessibility";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
