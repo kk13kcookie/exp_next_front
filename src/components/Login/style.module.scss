@@ -30,14 +30,22 @@
       height: 45px;
       padding: 10px;
     }
+
+    p {
+      color: red;
+      margin-top: 5px;
+    }
   }
 
   &__btn {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
     width: 200px;
     height: 45px;
     border: none;
     margin: 30px auto 0;
-    display: block;
     font-size: 16px;
     background: #000;
     border-radius: 5px;

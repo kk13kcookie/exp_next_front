@@ -1,9 +1,18 @@
+"use client";
+import { useForm } from "react-hook-form";
 import React from "react";
 import styles from "./style.module.scss";
 import Link from "next/link";
 import Face6Icon from "@mui/icons-material/Face6";
 
 const Login = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (values) => console.log(values);
+
   return (
     <div className={styles.form}>
       {/*  */}
@@ -11,19 +20,38 @@ const Login = () => {
 
       <div className={styles.form__item}>
         <label htmlFor="">メールアドレス</label>
-        <input type="text" placeholder="メールアドレスを入力してください" />
+        <input
+          type="email"
+          {...register("email", {
+            required: "メールアドレスは必須です",
+            pattern: {
+              value: /^[^@]+@[^@]+\.[^@]+$/,
+              message: "メールアドレスの形式が正しくありません",
+            },
+          })}
+          placeholder="メールアドレスを入力してください"
+        />
+        {errors.email && <p>{errors.email.message}</p>}
       </div>
 
       <div className={styles.form__item}>
         <label htmlFor="">パスワード</label>
-        <input type="text" placeholder="パスワードを入力してください" />
+        <input
+          type="password"
+          {...register("password", {
+            required: "パスワードは必須です",
+            minLength: {
+              value: 8,
+              message: "パスワードは8文字以上で入力してください",
+            },
+          })}
+          placeholder="パスワードを入力してください"
+        />
+        {errors.password && <p>{errors.password.message}</p>}
       </div>
-      <button className={styles.form__btn}>
-        <Face6Icon color="primary" />
+      <button className={styles.form__btn} onClick={handleSubmit(onSubmit)}>
         <Face6Icon color="warning" />
-        <Face6Icon color="secondary" />
         ログイン
-        <Face6Icon sx={{ color: "red" }} />
         <Face6Icon style={{ color: "green" }} />
       </button>
 
