@@ -4,6 +4,8 @@ import React from "react";
 import styles from "./style.module.scss";
 import Link from "next/link";
 import Face6Icon from "@mui/icons-material/Face6";
+import apiClient from "@/lib/apiClient";
+import { useRouter } from "next/navigation"; // navigationを選ぶ
 
 const Login = () => {
   const {
@@ -12,6 +14,27 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (values) => console.log(values);
+
+  // 画面遷移のためUseRouterを準備
+  const router = useRouter();
+
+  // 送信処理
+  const handleLogin = async () => {
+    try {
+      // 丸括弧内エンドポイント
+      const response = await apiClient.post("/api/auth/login", {
+        email, //useStateで保持しているか、react-hook-formで保持しているかどちらか
+        password,
+      });
+      // jwtトークンをLocalStorageに保存
+      localStorage.setItem("token", response.data.token);
+      // ログイン成功後
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      alert("入力内容が正しくないため、ログインできません");
+    }
+  };
 
   return (
     <div className={styles.form}>
@@ -49,7 +72,7 @@ const Login = () => {
         />
         {errors.password && <p>{errors.password.message}</p>}
       </div>
-      <button className={styles.form__btn} onClick={handleSubmit(onSubmit)}>
+      <button className={styles.form__btn} onClick={handleLogin(onSubmit)}>
         <Face6Icon color="warning" />
         ログイン
         <Face6Icon style={{ color: "green" }} />

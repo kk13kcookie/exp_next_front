@@ -4,6 +4,8 @@ import React from "react";
 import styles from "./style.module.scss";
 import Link from "next/link";
 import Face6Icon from "@mui/icons-material/Face6";
+import { useRouter } from "next/navigation";
+import apiClient from "@/lib/apiClient";
 
 const Signup = () => {
   const {
@@ -12,6 +14,30 @@ const Signup = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (values) => console.log(values);
+
+
+// 画面遷移のためUseRouterを準備
+  const router = useRouter();
+
+  // 登録処理
+  const handleSignUp = async () => {
+    try {
+      // 丸括弧内エンドポイント
+      const response = await apiClient.post("/api/auth/register", {
+        username,
+        email, //useStateで保持しているか、react-hook-formで保持しているかどちらか
+        password
+      });
+
+      // 登録成功後にログイン画面に飛ばす
+      setTimeout(()=> {
+        router.push("/");
+      }, 2000);
+      
+    } catch (error) {
+      console.log("新規登録エラー:", error);
+    }
+  };
 
   return (
     <div className={styles.form}>

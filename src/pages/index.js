@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 // import styles from "@/styles/Home.module.css";
 import styles from "@/styles/styles.module.scss";
@@ -6,8 +7,38 @@ import Timeline from "@/components/Timeline";
 import Post from "@/components/Post";
 import { mockData } from "@/mock/data";
 import { InsertEmoticon } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+import apiClient from "@/lib/apiClient";
 
 export default function Home() {
+  // バックエンドから取得したデータを保持する
+  const [posts, setPosts] = useState([]);
+  // 画面遷移で使用するもの
+  const router = useRouter();
+
+  // ログインチェックのためにuseEffect
+  useEffect(() => {
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   router.push("/login");
+    //   return;
+    // }
+
+    // 取得処理
+    const fetchPosts = async () => {
+      try {
+        const response = await apiClient.get("/api/posts");
+        console.log(response, "response取得チェック");
+        setPosts(response.data);
+      } catch (error) {
+        console.log("投稿に失敗しました:", error);
+      }
+    };
+
+    fetchPosts();
+
+  }, []);
+
   return (
     <>
       <Head>
